@@ -4,13 +4,17 @@ const { check, validationResult } = require('express-validator');
 const multer = require('multer');
 
 // controllers
-const controllers = require('../controllers/index');
+const user = require('../controllers/user');
+const credentials = require('../controllers/credentials');
 
 // index route
 router.get('/credentials/:id', (req, res)=>{
   console.log(req.params.id);
   res.json({ status: true, msg: 'You reached me!' })
 })
+
+// create credentials
+router.post('/credentials', credentials.newCred);
 
 // signup route
 router.post('/signup', [
@@ -20,11 +24,11 @@ router.post('/signup', [
     check('username').isLength({ min: 1 }),
     check('email').isEmail(),
     check('password').isLength({ min: 6 })
-  ], controllers.signup)
+  ], user.signup)
 
 
 // login route
-router.post('/login', controllers.login);
+router.post('/login', user.login);
 
 
 // get profile details
