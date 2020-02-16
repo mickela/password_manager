@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import { Consumer } from '../context';
+import { Redirect } from 'react-router-dom';
 import Modal from './Mymodal';
 import Credform from './forms/Credform';
 
@@ -8,7 +8,8 @@ export class Landing extends Component {
         super();
         this.state = {
             isLoaded: false,
-            value: ''
+            value: '',
+            redirect: false
         }
     }
 
@@ -29,17 +30,26 @@ export class Landing extends Component {
     }
 
     componentDidMount(){
-        this.FetchData();
+        var isLoggedIn = sessionStorage.getItem('isLoggedIn');
+        // console.log('isloggedin', typeof isLoggedIn)
+        if(isLoggedIn === 'true' || isLoggedIn === true){
+            this.FetchData();
+        }else if(isLoggedIn === null || isLoggedIn === 'false' || isLoggedIn === false){
+         this.setState(()=>({ redirect: true }))   
+        }
     }
 
     render() {
-        const { isLoaded } = this.state;
-        if(isLoaded === false){
+        const { isLoaded, redirect } = this.state;
+        if(isLoaded === false && redirect !== true){
             return (
                 <div>
                     loading...
                 </div>
             )            
+        }else if(isLoaded === false && redirect === true){
+            return <Redirect to="/login" />;
+            // this.setState(()=>({ redirect: false }))   
         }else{
             return (
                 <div className="container">
