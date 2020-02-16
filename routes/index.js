@@ -8,10 +8,7 @@ const user = require('../controllers/user');
 const credentials = require('../controllers/credentials');
 
 // index route
-router.get('/credentials/:id', (req, res)=>{
-  console.log(req.params.id);
-  res.json({ status: true, msg: 'You reached me!' })
-})
+router.get('/credentials/:user_id', credentials.fetchCreds)
 
 // create credentials
 router.post('/credentials', credentials.newCred);

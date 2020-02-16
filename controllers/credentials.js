@@ -25,3 +25,19 @@ exports.newCred = function(req, res, next){
         }
     })
 }
+
+exports.fetchCreds = function(req, res,next){
+    const { user_id } = req.params;
+    console.log(user_id);
+    Credential.findAll({ where: { user_id: user_id } })
+    .then(cred =>{
+        console.log(cred.length)
+        if(cred.length > 0){
+            res.json({ status: true, msg: 'your credentials', cred })
+        }else{
+            res.json({ status: false, msg: 'you have no credentials', })
+        }
+    })
+    .catch(err => console.log(err))
+
+}
