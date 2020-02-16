@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
+import { MDBDataTable } from 'mdbreact';
 import Modal from './Mymodal';
+import Password from './password';
 import Credform from './forms/Credform';
+import { Cols } from './columns';
 
 export class Landing extends Component {
     constructor(){
@@ -9,6 +12,7 @@ export class Landing extends Component {
         this.state = {
             isLoaded: false,
             value: '',
+            credentials: [],
             redirect: false
         }
     }
@@ -21,7 +25,24 @@ export class Landing extends Component {
         .then(data =>{
             console.log(data);
             if(data.status === true){
-                this.setState(()=>({ value: 'You have credentials to view', isLoaded: true }));
+                let i = 1;
+                
+                data.cred.forEach(crede =>{
+                    crede.sn = i++;
+                    let ky = crede.key;
+                    crede.key = <Password>{ky}</Password>;
+                    crede.action = <>
+                        <button className="btn btn-sm btn-info">edit</button>
+                        <button className="btn btn-sm btn-danger">delete</button>
+                    </>;
+                })
+
+                this.setState(()=>({
+                    value: data.msg, 
+                    isLoaded: true,
+                    credentials: data.cred
+                }));
+
             }else{
                 this.setState(()=>({ value: 'You have no credentials to view', isLoaded: true }));
             }
@@ -51,16 +72,31 @@ export class Landing extends Component {
             return <Redirect to="/login" />;
             // this.setState(()=>({ redirect: false }))   
         }else{
+            const { credentials } = this.state;
+
+            for (let i = credentials.length-1; i >= 0; i--) {
+                credentials.push(credentials[i]);
+                credentials.splice(i, 1);
+            }
+
+            let data = {
+                columns: Cols,
+                rows: credentials
+            };
+
+            let btnstyle =  {borderRadius: '16rem'};
+
             return (
                 <div className="container">
-                    <h3>
-                        <Modal Class="btn-info btn-lg rounded-circle shadow" buttonName="+" title="New Credential">
+                    <h3 className="pt-3">
+                        <Modal Class="btn-info btn-lg shadow" buttonStyle={btnstyle} buttonIcon="fas fa-edit" title="New Credential">
                             <Credform />
                         </Modal>
                         &nbsp;
-                        {this.state.value}
+                    <span className="ml-5">{this.state.value}</span>
                     </h3>
                     <hr />
+                    <MDBDataTable striped bordered hover data={data} />
                 </div>
             )
         }

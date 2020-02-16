@@ -11,7 +11,8 @@ function Mymodal(props){
 
     return (
       <>
-        <button className={btnclass} onClick={handleShow}>
+        <button className={btnclass} onClick={handleShow} style={props.buttonStyle}>
+          <i className={props.buttonIcon} />
           {props.buttonName}
         </button>
   
