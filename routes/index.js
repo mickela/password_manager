@@ -13,6 +13,12 @@ router.get('/credentials/:user_id', credentials.fetchCreds)
 // create credentials
 router.post('/credentials', credentials.newCred);
 
+// update credentials
+router.put('/credentials', credentials.updateCred);
+
+// delete credentials
+router.delete('/credentials', credentials.deleteCred);
+
 // signup route
 router.post('/signup', [
     // validate input fields

@@ -41,3 +41,62 @@ exports.fetchCreds = function(req, res,next){
     .catch(err => console.log(err))
 
 }
+
+exports.updateCred = function(req, res, next){
+
+    const { user_id, id, app, login, key, alt_login } = req.body;
+    console.log(req.body);
+
+    Credential.update({ 
+        app: app,
+        login: login,
+        key: key,
+        altLogin: alt_login,
+        updatedAt: Date.now()
+    }, { 
+        where: { 
+            id: id, 
+            user_id: user_id 
+        } 
+    })
+    .then(resp => {
+        if(resp.length > 0){
+            res.json({ status: true, msg: 'updated credentials' });
+        }else{
+            res.json({ status: false, msg: 'wrong parameters passed' });
+        }
+        console.log(resp)
+    })
+    .catch(err => {
+        console.log(err)
+        res.json({ status: false, msg: 'can not update credentials at the moment' });
+    })
+
+}
+
+exports.deleteCred = function(req, res, next){
+
+    const { id, user_id } = req.body;
+
+    Credential.destroy({
+        where: {
+            id: id,
+            user_id: user_id
+        }
+    }).then(resp =>{
+
+        if(resp === 1){
+            res.json({ status: true, msg: 'deleted credentials' });
+        }else{
+            res.json({ status: false, msg: 'wrong parameters passed' });
+        }
+
+        console.log(resp)
+
+    }).catch(err =>{
+
+        console.log(err)
+        res.json({ status: false, msg: 'can not delete credentials at the moment' });
+    })
+
+}
