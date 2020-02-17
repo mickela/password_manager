@@ -4,9 +4,11 @@ import { MDBDataTable } from 'mdbreact';
 import Modal from './Mymodal';
 import Password from './password';
 import Credform from './forms/Credform';
+import Editcred from './forms/Editcred';
+import Deletecred from './forms/Deletecred';
 import { Cols } from './columns';
 
-export class Landing extends Component {
+class Landing extends Component {
     constructor(){
         super();
         this.state = {
@@ -32,8 +34,12 @@ export class Landing extends Component {
                     let ky = crede.key;
                     crede.key = <Password>{ky}</Password>;
                     crede.action = <>
-                        <button className="btn btn-sm btn-info">edit</button>
-                        <button className="btn btn-sm btn-danger">delete</button>
+                        <Modal Class="btn-sm btn-info mr-1" buttonIcon="fas fa-pen" title="Edit Credential">
+                            <Editcred userId={crede.user_id} id={crede.id} username={crede.login} email={crede.altLogin} app={crede.app} password={ky} />
+                        </Modal>
+                        <Modal Class="btn-sm btn-danger ml-1" buttonIcon="fas fa-trash-alt" title="Delete Credential">
+                            <Deletecred userId={crede.user_id} id={crede.id} app={crede.app}/>
+                        </Modal>
                     </>;
                 })
 
