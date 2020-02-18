@@ -98,7 +98,7 @@ class Landing extends Component {
                     <Navbar page="home" />
                     <div className="container">
                         <h3 className="pt-3">
-                            <Modal Class="btn-info btn-lg shadow" buttonStyle={btnstyle} buttonIcon="fas fa-edit" title="New Credential">
+                            <Modal Class="btn-info btn-lg shadow" buttonStyle={btnstyle} buttonIcon="fas fa-pencil-alt" title="New Credential">
                                 <Credform />
                             </Modal>
                             &nbsp;
