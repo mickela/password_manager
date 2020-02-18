@@ -5,23 +5,18 @@ function Navbar(props) {
 
     const [state, setstate] = useState(false);
 
-    const redire = () => setstate(true);
-
     const logout = ()=>{
         sessionStorage.clear();
-        redire();
+        setstate(true);
     }
+
     if(state === true){
         return( <Redirect to="/login" /> );
     }else{
-        let activeHome, activeProfile;
-        if(props.page === 'home'){
-            activeHome = "nav-item active";
-            activeProfile = 'nav-item ';
-        }else if(props.page === 'profile'){
-            activeHome = 'nav-item ';
-            activeProfile = "nav-item active";
-        }
+
+        let activeHome = `nav-item ${ props.page === 'home' ? 'active' : '' }`,
+        activeProfile = `nav-item ${ props.page === 'profile' ? 'active' : '' }`;
+
         return (
             <div>
                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
