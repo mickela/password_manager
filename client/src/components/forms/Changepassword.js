@@ -24,7 +24,7 @@ class Changepassword extends Component {
         formdata.append("new_password", new_password);
 
         fetch('/newpassword', {
-            method: 'POST',
+            method: 'PUT',
             headers: new Headers(),
             body: formdata
         }).then(res => res.json())
@@ -36,7 +36,7 @@ class Changepassword extends Component {
 
     render() {
         return (
-            <div className="text-center">
+            <div className="text-center mt-5">
                 <form onSubmit={this.submit}>
                     <div className="form-group">
                         <input type="password" className="form-control" onChange={this.handleInput} name="password" placeholder="current password" />
