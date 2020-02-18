@@ -4,6 +4,7 @@ import { MDBDataTable } from 'mdbreact';
 import Modal from './Mymodal';
 import Password from './password';
 import Credform from './forms/Credform';
+import Navbar from './Navbar';
 import Editcred from './forms/Editcred';
 import Deletecred from './forms/Deletecred';
 import { Cols } from './columns';
@@ -93,17 +94,20 @@ class Landing extends Component {
             let btnstyle =  {borderRadius: '16rem'};
 
             return (
-                <div className="container">
-                    <h3 className="pt-3">
-                        <Modal Class="btn-info btn-lg shadow" buttonStyle={btnstyle} buttonIcon="fas fa-edit" title="New Credential">
-                            <Credform />
-                        </Modal>
-                        &nbsp;
-                    <span className="ml-5">{this.state.value}</span>
-                    </h3>
-                    <hr />
-                    <MDBDataTable striped bordered hover data={data} />
-                </div>
+                <>
+                    <Navbar page="home" />
+                    <div className="container">
+                        <h3 className="pt-3">
+                            <Modal Class="btn-info btn-lg shadow" buttonStyle={btnstyle} buttonIcon="fas fa-edit" title="New Credential">
+                                <Credform />
+                            </Modal>
+                            &nbsp;
+                        <span className="ml-5">{this.state.value}</span>
+                        </h3>
+                        <hr />
+                        <MDBDataTable striped bordered hover data={data} />
+                    </div>
+                </>
             )
         }
     }

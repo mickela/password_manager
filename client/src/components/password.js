@@ -17,7 +17,9 @@ function Password(props) {
         <div>
             <input type={type} value={props.children} style={style} disabled />
             &nbsp;
-            <i className="fas fa-eye" style={{ cursor: 'pointer' }} onClick={()=>{ setType( isText ? false : true ) }} />
+            <button className="btn btn-light" onClick={()=>{ setType( isText ? false : true ) }} >
+                <i className="fas fa-eye" style={{ cursor: 'pointer' }}/>
+            </button>
         </div>
     )
 }
