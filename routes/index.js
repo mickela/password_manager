@@ -6,6 +6,7 @@ const multer = require('multer');
 // controllers
 const user = require('../controllers/user');
 const credentials = require('../controllers/credentials');
+const updateuser = require('../controllers/updateuser');
 
 // index route
 router.get('/credentials/:user_id', credentials.fetchCreds)
@@ -37,6 +38,8 @@ router.post('/login', user.login);
 // get profile details
 router.get('/profile', (req, res)=>{ console.log(req.body) })
 
+// update user details
+router.put('/editprofile', updateuser.details);
 
 module.exports = router;
 

@@ -5,11 +5,11 @@ const upload = multer();
 const db = require('./config/db');
 const app = express();
 
+app.disable('x-powered-by');
 app.use(express.static('./public'));
 app.use(upload.array());
 
 app.use(router);
-// app.disable('X-Powered-By');
 
 db
   .authenticate()
