@@ -23,9 +23,9 @@ router.delete('/credentials', credentials.deleteCred);
 // signup route
 router.post('/signup', [
     // validate input fields
-    check('fname').isLength({ min: 1 }),
-    check('lname').isLength({ min: 1 }),
-    check('username').isLength({ min: 1 }),
+    check('fname').isLength({ min: 2 }),
+    check('lname').isLength({ min: 2 }),
+    check('username').isLength({ min: 3 }),
     check('email').isEmail(),
     check('password').isLength({ min: 6 })
   ], user.signup)
@@ -39,7 +39,18 @@ router.post('/login', user.login);
 router.get('/profile', (req, res)=>{ console.log(req.body) })
 
 // update user details
-router.put('/editprofile', updateuser.details);
+router.put('/editprofile',  [
+  // validate input fields
+  check('fname').isLength({ min: 1 }),
+  check('lname').isLength({ min: 1 }),
+  check('username').isLength({ min: 1 }),
+  check('email').isEmail(),
+],  updateuser.details);
+
+router.put('/newpassword', [
+  check('password').isLength({ min: 6 }),
+  check('new_password').isLength({ min: 6 })
+], updateuser.changepassword);
 
 module.exports = router;
 

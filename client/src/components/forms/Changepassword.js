@@ -13,6 +13,11 @@ class Changepassword extends Component {
         this.setState(()=>({ [name]: [value] }));
     }
 
+    componentDidMount(){
+        const id = sessionStorage.getItem('profile').split(',')[0];
+        this.setState(()=>({ id: id }));
+    }
+
     submit = e =>{
         e.preventDefault();
 
