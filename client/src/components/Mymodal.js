@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal } from 'react-bootstrap'
+import { Modal } from 'react-bootstrap';
 
 
 function Mymodal(props){
