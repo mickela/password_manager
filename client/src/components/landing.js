@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { MDBDataTable } from 'mdbreact';
+import { Spinner } from 'react-bootstrap';
 import Modal from './Mymodal';
 import Password from './password';
 import Credform from './forms/Credform';
@@ -21,6 +22,13 @@ class Landing extends Component {
     }
 
     FetchData(){
+        // reset state
+        this.setState(()=>({
+            value: '', 
+            isLoaded: false,
+            credentials: []
+        }));
+
         const profile = sessionStorage.getItem('profile').split(',');
         console.log(profile)
         fetch(`/credentials/${profile[0]}`)
@@ -36,10 +44,10 @@ class Landing extends Component {
                     crede.key = <Password>{ky}</Password>;
                     crede.action = <>
                         <Modal Class="btn-sm btn-info mr-1" buttonIcon="fas fa-pen" title="Edit Credential">
-                            <Editcred userId={crede.user_id} id={crede.id} username={crede.login} email={crede.altLogin} app={crede.app} password={ky} />
+                            <Editcred userId={crede.user_id} id={crede.id} username={crede.login} email={crede.altLogin} app={crede.app} password={ky} reload={this.reload} />
                         </Modal>
                         <Modal Class="btn-sm btn-danger ml-1" buttonIcon="fas fa-trash-alt" title="Delete Credential">
-                            <Deletecred userId={crede.user_id} id={crede.id} app={crede.app}/>
+                            <Deletecred userId={crede.user_id} id={crede.id} app={crede.app} reload={this.reload}/>
                         </Modal>
                     </>;
                 })
@@ -67,12 +75,19 @@ class Landing extends Component {
         }
     }
 
+    reload = () =>{
+        this.FetchData();
+    }
+
     render() {
         const { isLoaded, redirect } = this.state;
         if(isLoaded === false && redirect !== true){
             return (
                 <div>
-                    loading...
+                    <Navbar page="home" />
+                    <div className="pt-5 mb-5 text-center">
+                        <Spinner animation="border" variant="primary" size="lg" />
+                    </div>
                 </div>
             )            
         }else if(isLoaded === false && redirect === true){
@@ -99,7 +114,7 @@ class Landing extends Component {
                     <div className="container">
                         <h3 className="pt-3">
                             <Modal Class="btn-info btn-lg shadow" buttonStyle={btnstyle} buttonIcon="fas fa-pencil-alt" title="New Credential">
-                                <Credform />
+                                <Credform reload={this.reload} />
                             </Modal>
                             &nbsp;
                         <span className="ml-5">{this.state.value}</span>

@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { Spinner } from 'react-bootstrap';
 
 class Deletecred extends Component {
     constructor(){
@@ -13,7 +14,10 @@ class Deletecred extends Component {
 
         const { id, userId } = this.props;
 
+        this.setState(()=>({ isPosted: true }))
+        
         const formdata = new FormData();
+
         formdata.append("id", id);
         formdata.append("user_id", userId);
 
@@ -24,20 +28,32 @@ class Deletecred extends Component {
         }).then(res => res.json())
         .then(data =>{
             console.log(data)
+            if(data.status === true){
+                this.props.reload(true)
+            }
         }).catch(err => console.log(err))
     }
 
     render() {
         const { app } = this.props;
-        return (
-            <div>
-                Are you sure you want to delete your <b>{app}</b> credentials?
-                <hr />
-                <div className="text-right">
-                    <button className="btn btn-danger btn-sm" onClick={this.delete}>Delete</button>
+        const { isPosted } = this.state;
+        if(isPosted === true){
+            return(
+                <div className="text-center m-5">
+                    <Spinner animation="border" size="lg" variant="warning" />
                 </div>
-            </div>
-        )
+            )
+        }else{
+            return (
+                <div>
+                    Are you sure you want to delete your <b>{app}</b> credentials?
+                    <hr />
+                    <div className="text-right">
+                        <button className="btn btn-danger btn-sm" onClick={this.delete}>Delete</button>
+                    </div>
+                </div>
+            )
+        }
     }
 }
 
