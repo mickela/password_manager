@@ -4,6 +4,7 @@ const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+const path = require('path');
 
 
 // set storage engine for image
@@ -14,13 +15,6 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: 2000000 },
-    fileFilter: function(req, file, cb){
-        checkFileType(file, cb)
-    }
-}).single('myImage');
 
 // check file type
 function checkFileType(file, cb){
@@ -38,65 +32,88 @@ function checkFileType(file, cb){
     }
 }
 
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 2000000 },
+    fileFilter: function(req, file, cb){
+        checkFileType(file, cb)
+    }
+}).single('picture');
+
+
 
 exports.signup = function(req, res, next){
-    //   errors, if any
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() })
-    }
-  
-    
-    // upload(req, res, (err) =>{
-    //     if(err){
-    //         res.status(422).json({ msg: err })
-    //     }else{
-    //         console.log(req.file)
-    //         if(req.file == undefined){
-    //             res.status(422).json({ msg: 'Error: No file selected!' })
-    //         }else{
-    //             res.json({ msg: 'File uploaded!', file: `uploads/${req.file.filename}` })
-    //         }
-    //     }
-    // })
 
-    let { fname, lname, email, username, password } = req.body;
+    upload(req, res, (err) =>{
 
-// check if username or email already exists
-    User.findAll({ 
-        where: {
-            [Op.or]: [{email: email}, {username: username}]
-          } 
-    })
-    .then(user =>{
-        console.log(user.length)
-        if(user.length > 0){
-            res.json({ status: false, msg: 'user already exists!', errors: [] })
+        if(err){
+            res.status(422).json({ status: false, msg: err })
         }else{
-            // hash password
-            bcrypt.genSalt(10, (err, salt)=> {
-               bcrypt.hash(password, salt, (err, hash)=>{
-                   if(err) throw err;
-                   //  set password to hash
-                   password = hash;
-                   
-                   // Create a new user
-                   User.create({ first_name: fname, last_name: lname, email, username, password })
-                   .then(user => {
-                       console.log("User's auto-generated ID:", user.id);
-                       // req.flash('success_msg', 'You are now registered and can log in');
-                       res.json({ status: true, msg: 'User created successfully' });
-                   })
-                   .catch(err => { 
-                       console.log(err) 
-                       res.json({ status: false, msg: 'Oops, something went wrong. Try again later' })
-                   })
-               }
-           )})
+
+            if(req.file == undefined){
+                res.status(422).json({ status: false, msg: 'Error: No file selected!' })
+            }else{
+
+                const image = `uploads/${req.file.filename}`;
+
+                // errors, if any
+                        
+                const errors = validationResult(req.body)
+                if (!errors.isEmpty()) {
+                    console.log(errors)
+                    return res.status(422).json({ status: false, msg: "It seems you entered invalid data", errors: errors.array() })
+                }
+
+                let { fname, lname, email, username, password } = req.body;
+                
+                
+                console.log(req.body)
+                console.log(image)
+            
+            // check if username or email already exists
+                User.findAll({ 
+                    where: {
+                        [Op.or]: [{email: email}, {username: username}]
+                      } 
+                })
+                .then(user =>{
+                    console.log(user.length)
+                    if(user.length > 0){
+                        res.json({ status: false, msg: 'user already exists!', errors: [] })
+                    }else{
+                        // hash password
+                        bcrypt.genSalt(10, (err, salt)=> {
+                           bcrypt.hash(password, salt, (err, hash)=>{
+                               if(err) throw err;
+                               //  set password to hash
+                               password = hash;
+                            
+                               // Create a new user
+                               User.create({ first_name: fname, last_name: lname, email, username, password, image })
+                               .then(user => {
+                                   console.log("User's auto-generated ID:", user.id);
+                                   // User is now registered and can log in
+                                   res.json({ status: true, msg: 'User created successfully' });
+                               })
+                               .catch(err => { 
+                                   console.log(err) 
+                                   res.json({ status: false, msg: 'Oops, something went wrong. Try again later' })
+                               })
+                           }
+                       )})
+                    }
+                })
+
+            }
         }
-    })
-    
+        
+
+        
+    }) // close upload
+
 }
+
+
 
 
 exports.login = function(req, res, next){
@@ -134,7 +151,7 @@ exports.login = function(req, res, next){
                             lname: parsedData.last_name,
                             email: parsedData.email,
                             username: parsedData.username,
-                            // picture: parsedData.image
+                            picture: parsedData.image
                         }
                     })
                 }else{

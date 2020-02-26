@@ -3,6 +3,7 @@ const router = express.Router();
 const { check, validationResult } = require('express-validator');
 const multer = require('multer');
 
+
 // controllers
 const user = require('../controllers/user');
 const credentials = require('../controllers/credentials');
@@ -22,17 +23,17 @@ router.delete('/credentials', credentials.deleteCred);
 
 // signup route
 router.post('/signup', [
-    // validate input fields
-    check('fname').isLength({ min: 2 }),
-    check('lname').isLength({ min: 2 }),
-    check('username').isLength({ min: 3 }),
-    check('email').isEmail(),
-    check('password').isLength({ min: 6 })
-  ], user.signup)
+  // validate input fields
+  check('fname').isLength({ min: 2 }),
+  check('lname').isLength({ min: 2 }),
+  check('username').isLength({ min: 3 }),
+  check('email').isEmail(),
+  check('password').isLength({ min: 6 })
+], user.signup)
 
 
 // login route
-router.post('/login', user.login);
+router.post('/login', multer().array(), user.login);
 
 
 // get profile details
