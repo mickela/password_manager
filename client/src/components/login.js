@@ -23,7 +23,6 @@ class Login extends Component {
         if( username !== '' && password !== '' ){
             
             this.setState(()=>({ 
-                // isReadonly: true,
                 response: '',
                 isSent: true
             }))
@@ -57,7 +56,7 @@ class Login extends Component {
         
         if(isLoggedIn === true){
             sessionStorage.setItem('isLoggedIn', true);
-            sessionStorage.setItem('profile', [profile.id, profile.fname, profile.lname, profile.email, profile.username]);
+            sessionStorage.setItem('profile', [profile.id, profile.fname, profile.lname, profile.email, profile.username, profile.picture]);
             return(
                 <Redirect to="/" />
             )
@@ -125,15 +124,3 @@ class Login extends Component {
 }
 
 export default Login;
-
-
-
-// handleReload = (reload) =>{
-//     if(reload === true){
-//         this.setState({
-//             isLoaded: false,
-//             rows: []
-//         })
-//         this.handleLoad();
-//     }
-// }
