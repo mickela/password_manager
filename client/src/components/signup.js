@@ -116,7 +116,7 @@ class Signup extends Component {
                                 <div className="col-md-6">
                                     <div className="form-group text-center">
                                         <input type="file" className="d-none form-control custom-input" onChange={this.handleImage} name="picture" id="picture" /> {/* required */}
-                                        <label htmlFor="picture">
+                                        <label htmlFor="picture" className="cursor-pointer profile-img">
                                             <img src={this.state.dispImg} className="mx-auto img-thumbnail rounded cursor-pointer" alt="" />
                                         </label>
                                     </div>
