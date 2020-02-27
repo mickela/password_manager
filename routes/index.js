@@ -40,7 +40,7 @@ router.post('/login', multer().array(), user.login);
 router.get('/profile', (req, res)=>{ console.log(req.body) })
 
 // update user details
-router.put('/editprofile',  [
+router.put('/editprofile', [
   // validate input fields
   check('fname').isLength({ min: 1 }),
   check('lname').isLength({ min: 1 }),

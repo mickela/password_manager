@@ -4,35 +4,75 @@ const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+const path = require('path');
+
+
+// set storage engine for image
+const storage = multer.diskStorage({
+    destination: './public/uploads/',
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+    }
+});
+
+// check file type
+function checkFileType(file, cb){
+    // allowed extensions
+    const filetypes = /jpeg|jpg|png|gif/;
+    // check extensions
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    // check mime type
+    const mimetype = filetypes.test(file.mimetype)
+    if(mimetype && extname ){
+        return cb(null, true)
+    }else{
+        cb('Error: Image only');
+        cb('Error: Image only');
+    }
+}
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 2000000 },
+    fileFilter: function(req, file, cb){
+        checkFileType(file, cb)
+    }
+}).single('picture');
 
 exports.details = function(req, res, next){
-    // console.log(req.body)
-    const { id, fname, lname, username, email } = req.body;
+    upload(req, res, (err)=>{
+        console.log(req.body)
+        console.log(req.file)
 
-    User.update({ first_name: fname, last_name: lname, username: username, email: email, updatedAt: Date.now() }, { 
-        where: { id }
-    }).then(user =>{
-        console.log(user)
-        if(user.length === 1){
-            res.json({ status: true, msg: "User details updated successfully" });
-        }else{
-            res.json({ status: false, msg: 'can not update user details at the moment' });
-        }
-    })
-    .catch(err =>{
-        let errorMsg = err.errors[0].message;
-        console.log(errorMsg)
-        
-        if( errorMsg === 'email must be unique'){
-            res.json({ status: false, msg: 'It seems that email already exists' });
-        }
-        else if( errorMsg === 'username must be unique' ){
-            res.json({ status: false, msg: 'It seems that username is not available' });
-        }
-        else{
-            res.json({ status: false, msg: 'can not update user details at the moment' });
-        }
+        const { id, fname, lname, username, email, picture } = req.body;
+    
+        const image = `uploads/${req.file.filename}`;
 
+        User.update({ first_name: fname, last_name: lname, username: username, email: email, image, updatedAt: Date.now() }, { 
+            where: { id }
+        }).then(user =>{
+            console.log(user)
+            if(user.length === 1){
+                res.json({ status: true, msg: "User details updated successfully" });
+            }else{
+                res.json({ status: false, msg: 'can not update user details at the moment' });
+            }
+        })
+        .catch(err =>{
+            let errorMsg = err.errors[0].message;
+            console.log(errorMsg)
+            
+            if( errorMsg === 'email must be unique'){
+                res.json({ status: false, msg: 'It seems that email already exists' });
+            }
+            else if( errorMsg === 'username must be unique' ){
+                res.json({ status: false, msg: 'It seems that username is not available' });
+            }
+            else{
+                res.json({ status: false, msg: 'can not update user details at the moment' });
+            }
+    
+        })
     })
 }
 
