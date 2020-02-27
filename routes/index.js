@@ -48,11 +48,11 @@ router.put('/editprofile', [
   check('email').isEmail(),
 ],  updateuser.details);
 
-router.put('/newpassword', [
+router.put('/newpassword', multer().array(), [
   check('password').isLength({ min: 6 }),
   check('new_password').isLength({ min: 6 })
 ], updateuser.changepassword);
 
 module.exports = router;
 
-// install cuncurrently as a dev-dependency
+// install concurrently as a dev-dependency
