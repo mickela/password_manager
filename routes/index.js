@@ -13,7 +13,7 @@ const updateuser = require('../controllers/updateuser');
 router.get('/credentials/:user_id', credentials.fetchCreds)
 
 // create credentials
-router.post('/credentials', credentials.newCred);
+router.post('/credentials', multer().array() ,credentials.newCred);
 
 // update credentials
 router.put('/credentials', credentials.updateCred);
@@ -37,7 +37,7 @@ router.post('/login', multer().array(), user.login);
 
 
 // get profile details
-router.get('/profile', (req, res)=>{ console.log(req.body) })
+router.get('/profile/:id', user.profile);
 
 // update user details
 router.put('/editprofile', [

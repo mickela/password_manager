@@ -168,6 +168,31 @@ exports.login = function(req, res, next){
     })
 }
 
+exports.profile = function(req, res, next){
+    console.log(req.params);
+    const { id } = req.params;
 
+    User.findAll({ where: { id: id } })
+    .then(user =>{
+        console.log(user.length)
+        if(user.length > 0){
+            // username/email is correct
+            const data = JSON.stringify(user);    
+            
+            // parse user data to js object
+            let parsedData = JSON.parse(data)[0];
+            console.log(parsedData)
 
-// install cuncurrently as a dev-dependency
+            const { first_name, last_name, username, email, image } = parsedData;
+            res.json({ status: true, msg: 'User found', details: { first_name, last_name, username, email, image } });
+            
+        }else{
+            console.log(user)
+            res.json({ status: false, msg: 'User not found' });
+        }
+
+    })
+
+}
+
+// install cuncurrently as a dev-dependency 
