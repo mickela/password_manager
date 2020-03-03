@@ -8,7 +8,7 @@ class Editprofile extends Component {
         super()
         this.state = {
             id: '', fname: '', lname: '', email: '', username: '',
-            isSent: false, bg: 'info', response: '', picture: '', dispImg: ''
+            isSent: true, bg: 'info', response: '', picture: '', dispImg: ''
         }
     }
 
@@ -55,7 +55,7 @@ class Editprofile extends Component {
 
         const { id, fname, lname, email, username, picture } = this.state;
 
-        if( fname !== '' && lname !== '' && email !== '' && username !== '' && picture !== '' ){
+        if( fname !== '' && lname !== '' && email !== '' && username !== '' ){ //&& picture !== '' 
             this.setState(()=>({
                 isSent: true,
                 response: 'Updating..',
@@ -112,10 +112,20 @@ class Editprofile extends Component {
     }
 
     fetchDetails = ()=>{
-        const session = sessionStorage.getItem('profile').split(','),
-        id = session[0], fname = session[1], lname = session[2], email = session[3], username = session[4], dispImg = session[5];
-        console.log(id)
-        this.setState(()=>({ id, fname, lname, username, email, dispImg }))
+
+        let id = sessionStorage.getItem('profile').split(',')[0];
+        this.setState(()=>({ id }));
+        fetch(`/profile/${id}`)
+        .then(res => res.json())
+        .then(data =>{
+            console.log(data)
+            const { first_name, last_name, username, email, image } = data.details;
+            this.setState(()=>({ fname: first_name, lname: last_name, username, email, dispImg: image, picture: image, bg: 'success', isSent: false }))
+        })
+        .catch(err =>{
+            console.log(err)
+            this.fetchDetails();
+        })
     }
 
     componentDidMount(){

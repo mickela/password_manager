@@ -13,13 +13,13 @@ const updateuser = require('../controllers/updateuser');
 router.get('/credentials/:user_id', credentials.fetchCreds)
 
 // create credentials
-router.post('/credentials', multer().array() ,credentials.newCred);
+router.post('/credentials', multer().array(), credentials.newCred);
 
 // update credentials
-router.put('/credentials', credentials.updateCred);
+router.put('/credentials', multer().array(), credentials.updateCred);
 
 // delete credentials
-router.delete('/credentials', credentials.deleteCred);
+router.delete('/credentials', multer().array(), credentials.deleteCred);
 
 // signup route
 router.post('/signup', [

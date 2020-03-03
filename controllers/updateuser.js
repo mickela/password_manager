@@ -41,17 +41,24 @@ const upload = multer({
 
 exports.details = function(req, res, next){
     upload(req, res, (err)=>{
-        console.log(req.body)
-        console.log(req.file)
+        // console.log(req.body)
+        // console.log(req.file)
 
         const { id, fname, lname, username, email, picture } = req.body;
-    
-        const image = `uploads/${req.file.filename}`;
 
-        User.update({ first_name: fname, last_name: lname, username: username, email: email, image, updatedAt: Date.now() }, { 
+        let toUpdate = {};
+        
+        if(req.file){
+            const image = `uploads/${req.file.filename}`;
+            toUpdate = { first_name: fname, last_name: lname, username: username, email: email, image, updatedAt: Date.now() }
+        }else{
+            toUpdate = { first_name: fname, last_name: lname, username: username, email: email, image: picture, updatedAt: Date.now() }
+        }
+
+        User.update(toUpdate, { 
             where: { id }
         }).then(user =>{
-            console.log(user)
+            // console.log(user)
             if(user.length === 1){
                 res.json({ status: true, msg: "User details updated successfully" });
             }else{
@@ -71,7 +78,8 @@ exports.details = function(req, res, next){
             else{
                 res.json({ status: false, msg: 'can not update user details at the moment' });
             }
-    
+            res.json({ status: false, msg: 'can not update user details at the moment' });
+            // console.log(err)
         })
     })
 }

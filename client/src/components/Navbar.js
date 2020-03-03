@@ -66,9 +66,9 @@ class Navbar extends Component{
                                 <li className={activeHome}>
                                     <Link className="nav-link" to="/">Home </Link>
                                 </li>
-                                <li className={activeProfile}>
+                                {/* <li className={activeProfile}>
                                     <Link className="nav-link" to="/profile">Profile </Link>
-                                </li>
+                                </li> */}
                             </ul>
 
                             <div className="dropdown">
