@@ -95,8 +95,6 @@ class Editprofile extends Component {
                         bg: 'success'
                     }))
 
-                    this.props.reload(true)
-
                 }
             })
             .catch(err => console.log(err))
