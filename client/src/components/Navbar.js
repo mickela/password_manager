@@ -48,7 +48,7 @@ class Navbar extends Component{
         }else{
     
             let activeHome = `nav-item ${ this.props.page === 'home' ? 'active' : '' }`,
-            activeProfile = `nav-item ${ this.props.page === 'profile' ? 'active' : '' }`,
+            // activeProfile = `nav-item ${ this.props.page === 'profile' ? 'active' : '' }`,
             activeNav = `collapse navbar-collapse ${ show ? 'show' : '' }`,
             isExpanded = dropdown ? 'true' : 'false',
             dropClass = dropdown ? 'dropdown-menu show' : 'dropdown-menu';
@@ -77,6 +77,7 @@ class Navbar extends Component{
                                 </button>
                                 <div className={dropClass} aria-labelledby="navbarDropdown">
                                     <Link className="dropdown-item" to="/profile">Profile</Link>
+                                    <Link className="dropdown-item" to="/genpassword">Generate Password</Link>
                                     <div className="dropdown-divider"></div>
                                     <a className="dropdown-item text-danger" href="#as" onClick={this.logout}>Logout</a>
                                 </div>
