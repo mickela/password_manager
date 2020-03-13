@@ -4,6 +4,7 @@ import Login from './components/login';
 import Signup from './components/signup';
 import Landing from './components/landing';
 import Profile from './components/Profile';
+import Genpassword from './components/Genpassword';
 
 function Routes (){
     return(
@@ -12,6 +13,7 @@ function Routes (){
             <Route exact path='/profile' component={Profile} />
             <Route exact path='/login' component={Login} />
             <Route exact path='/signup' component={Signup} />
+            <Route exact path='/genpassword' component={Genpassword} />
         </>
     )
 }
